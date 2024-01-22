@@ -79,30 +79,34 @@ const markupImg = images.map(
   </li>`
 );
 
-imgBox.insertAdjacentHTML('afterbegin', markupImg.join('\n'));
-imgBox.addEventListener('click', clickImg);
+imgBoxRef.insertAdjacentHTML('afterbegin', markupImg.join('\n'));
+imgBoxRef.addEventListener('click', clickImg);
 
 function clickImg(e) {
   e.preventDefault();
 
-  if (e.target === e.currentTarget) return;
+  if (e.target === e.currentTarget) {
+    return
+  };
+  const originalLink = e.target.dataset.source;
   const instance = basicLightbox.create(
     `
-    <img src="${e.target.getAttribute(
-      'data-source'
-    )}" width="1112" height="640">
+    <img src="${originalLink}" width="1112" height="640">
   `,
     {
       onShow: () => {
-        document.removeEventListener("keydown", escKeydown);
+        document.removeEventListener('keydown', escKeydown);
       },
       onClose: () => {
         document.removeEventListener('keydown', escKeydown);
       },
     }
   );
+  instance.show();
 
   function escKeydown(e) {
-    if (e.code === 'Escape') instance.close();
+    if (e.code === 'Escape') {
+      instance.close();
+    }
   }
-}
+};
