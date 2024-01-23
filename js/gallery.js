@@ -86,27 +86,25 @@ function clickImg(e) {
   e.preventDefault();
 
   if (e.target === e.currentTarget) {
-    return
-  };
+    return;
+  }
   const originalLink = e.target.dataset.source;
+  const descriptionOriginal = e.target.alt;
   const instance = basicLightbox.create(
     `
-    <img src="${originalLink}" width="1112" height="640">
+    <img src="${originalLink}" alt="${descriptionOriginal}" width="1112" height="640">
   `,
     {
-      onShow: () => {
-        document.removeEventListener('keydown', escKeydown);
-      },
       onClose: () => {
         document.removeEventListener('keydown', escKeydown);
       },
     }
   );
-  instance.show();
+  instance.show(() => document.addEventListener('keydown', escKeydown));
 
   function escKeydown(e) {
     if (e.code === 'Escape') {
       instance.close();
     }
   }
-};
+}
