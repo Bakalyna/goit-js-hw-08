@@ -85,7 +85,7 @@ imgBoxRef.addEventListener('click', clickImg);
 function clickImg(e) {
   e.preventDefault();
 
-  if (e.target === e.currentTarget) {
+  if (e.target.nodeName !== 'IMG') {
     return;
   }
   const originalLink = e.target.dataset.source;
@@ -95,12 +95,16 @@ function clickImg(e) {
     <img src="${originalLink}" alt="${descriptionOriginal}" width="1112" height="640">
   `,
     {
+      onShow: () => {
+        document.addEventListener('keydown', escKeydown);
+      },
       onClose: () => {
         document.removeEventListener('keydown', escKeydown);
       },
     }
   );
-  instance.show(() => document.addEventListener('keydown', escKeydown));
+
+  instance.show();
 
   function escKeydown(e) {
     if (e.code === 'Escape') {
